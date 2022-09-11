@@ -5,87 +5,64 @@ import banco.conta.ContaCorrente;
 import banco.transacao.Transacao;
 import banco.usuario.Cliente;
 
+/**
+ * Classe principal do sistema. Representa o Caixa Eletronico
+ * 
+ * @author Daniela e Carlos Alberto
+ */
 public class CaixaEletronico {
 	// constantes para gerenciar fluxo de transacoes
-	private static final int FINALIZA = 0;
-	private static final int PRIMEIR0_FLUXO = 1;
-	private static final int CONTINUA = 4;
-	
+	private static final int FINALIZA = 0; // Encerra o programa
+	private static final int PRIMEIR0_FLUXO = 1; // Fluxo da AP2 questao 2
+	private static final int CONTINUA = 4; // Segue operando transacoes
+
+	/**
+	 * Metodo main, principal do sistema
+	 * 
+	 * @param args padrao
+	 */
 	public static void main(String[] args) {
 		int operandoTransacoes = PRIMEIR0_FLUXO;
-		boolean statusDoSaque;
-		
+
 		System.out.println("Seja bem-vindo(a) a cooperativa de credito mycu");
 		System.out.println();
 
 		Scanner ler = new Scanner(System.in);
 
-		/* Entrada de dados de Cliente */
-		String nome, endereco, rg;
-		System.out.print("Digite o seu nome: ");
-		nome = ler.nextLine();
-		System.out.print("Digite o seu rg: ");
-		rg = ler.nextLine();
+		// Entrada de dados de Cliente
+		Cliente cliente = leituraDadosCliente(ler);
 
-		System.out.print("Digite o seu endereco: ");
-		endereco = ler.nextLine();
-
-		Cliente cliente = new Cliente(nome, rg, endereco);
-
-		/* Entrada de dados de Conta Corrente */
-		int numeroConta, numeroAgencia;
-
-		System.out.print("Digite o numero da sua conta bancaria: ");
-		numeroConta = ler.nextInt();
-
-		System.out.print("Digite o numero da sua agencia: ");
-		numeroAgencia = ler.nextInt();
-
-		ContaCorrente contacorrente = new ContaCorrente(numeroConta, numeroAgencia);
+		// Entrada de dados de Conta Corrente
+		ContaCorrente contacorrente = leituraDadosConta(ler);
 
 		// Atribui conta corrente ao cliente
 		cliente.setConta(contacorrente);
 
+		// Realiza Transacoes
 		while (operandoTransacoes >= PRIMEIR0_FLUXO) {
-			
-			// segue fluxo solicitado na AP2
 			if (operandoTransacoes == PRIMEIR0_FLUXO) {
-				/* Depositar na conta corrente */
-				System.out.print("Digite um valor para depositar em sua conta: ");
-				cliente.getConta().depositar(ler.nextFloat());
-
-				/* Sacar da conta corrente */
-				System.out.print("Digite um valor para sacar em sua conta: ");
-				statusDoSaque = cliente.getConta().sacar(ler.nextFloat());
-
-				// exibe mensagem se saldo insuficiente
-				if (!statusDoSaque) {
-					mostraMensagemSaque(cliente.getConta().getSaldo(), statusDoSaque);
-				}
-
-				// imprime extrato
+				// Questao 2, segue o fluxo:
+				realizaDeposito(cliente, ler);
+				realizaSaque(cliente, ler);
 				mostrarExtrato(cliente);
 			}
 
-//			Segue o fluxo para realizar mais transacoes, apenas para demonstracao
+			// Continua para realizar mais transacoes, apenas para demonstracao
 			System.out.println();
 			System.out.println();
 			System.out.println("O que deseja fazer agora?");
 			System.out.println("0 - Sair		1 - Sacar		2 - Depositar		3 - Obter extrato");
-			
+
 			switch (ler.nextInt()) {
 			case 0:
 				operandoTransacoes = FINALIZA;
 				break;
 			case 1: {
-				System.out.print("Digite um valor para sacar em sua conta: ");
-				statusDoSaque = cliente.getConta().sacar(ler.nextFloat());
-				mostraMensagemSaque(cliente.getConta().getSaldo(), statusDoSaque);
+				realizaSaque(cliente, ler);
 				break;
 			}
 			case 2: {
-				System.out.print("Digite um valor para depositar em sua conta: ");
-				cliente.getConta().depositar(ler.nextFloat());
+				realizaDeposito(cliente, ler);
 				break;
 			}
 			case 3: {
@@ -93,8 +70,8 @@ public class CaixaEletronico {
 				break;
 			}
 			}
-			
-			if(operandoTransacoes > FINALIZA) {
+
+			if (operandoTransacoes > FINALIZA) {
 				operandoTransacoes = CONTINUA;
 			}
 		}
@@ -102,9 +79,9 @@ public class CaixaEletronico {
 	}
 
 	/**
-	 * Imprime extrato da conta
+	 * Imprime dados bancarios e extrato da conta
 	 * 
-	 * @param cliente
+	 * @param cliente objeto cliente com seus dados e conta corrente
 	 */
 	public static void mostrarExtrato(Cliente cliente) {
 		System.out.println();
@@ -143,7 +120,8 @@ public class CaixaEletronico {
 	/**
 	 * Imprime o mensagem do status do saque
 	 * 
-	 * @param saldo valor do saldo da conta corrente do cliente
+	 * @param saldo  valor do saldo da conta corrente do cliente
+	 * @param status statud do saque
 	 */
 	public static void mostraMensagemSaque(float saldo, boolean status) {
 		if (status) {
@@ -151,5 +129,66 @@ public class CaixaEletronico {
 		} else
 			System.out.println(
 					"Perai, não tem como você sacar esse valor. Você só tem R$ " + saldo + ". Quer ficar devendo? 🤨");
+	}
+
+	/**
+	 * Interage com usuario para receber seus dados de cliente
+	 * 
+	 * @param ler leitor (scanner) para receber entradas
+	 * @return Cliente nova instancia de cliente
+	 */
+	public static Cliente leituraDadosCliente(Scanner ler) {
+		String nome, endereco, rg;
+		System.out.print("Digite o seu nome: ");
+		nome = ler.nextLine();
+		System.out.print("Digite o seu rg: ");
+		rg = ler.nextLine();
+
+		System.out.print("Digite o seu endereco: ");
+		endereco = ler.nextLine();
+
+		return new Cliente(nome, rg, endereco);
+	}
+
+	/**
+	 * Interage com cliente para receber dados da conta
+	 * 
+	 * @param ler leitor (scanner) para receber entradas
+	 * @return ContaCorrente nova instancia de conta corrente
+	 */
+	public static ContaCorrente leituraDadosConta(Scanner ler) {
+		int numeroConta, numeroAgencia;
+
+		System.out.print("Digite o numero da sua conta bancaria: ");
+		numeroConta = ler.nextInt();
+
+		System.out.print("Digite o numero da sua agencia: ");
+		numeroAgencia = ler.nextInt();
+
+		return new ContaCorrente(numeroConta, numeroAgencia);
+	}
+
+	/**
+	 * Interage com o cliente para realizar saque. Se mal sucedido, informa o
+	 * cliente
+	 * 
+	 * @param cliente objeto cliente com seus dados e conta corrente
+	 * @param ler     leitor (scanner) das entradas
+	 */
+	public static void realizaSaque(Cliente cliente, Scanner ler) {
+		System.out.print("Digite um valor para sacar em sua conta: ");
+		boolean statusDoSaque = cliente.getConta().sacar(ler.nextFloat());
+		mostraMensagemSaque(cliente.getConta().getSaldo(), statusDoSaque);
+	}
+
+	/**
+	 * Interage com o cliente para realizar deposito
+	 * 
+	 * @param cliente objeto cliente com seus dados e conta corrente
+	 * @param ler     leitor (scanner) das entradas
+	 */
+	public static void realizaDeposito(Cliente cliente, Scanner ler) {
+		System.out.print("Digite um valor para depositar em sua conta: ");
+		cliente.getConta().depositar(ler.nextFloat());
 	}
 }

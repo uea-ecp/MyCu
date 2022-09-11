@@ -1,5 +1,10 @@
 package banco.transacao;
 
+/**
+ * Representa uma transacao
+ * 
+ * @author Daniela e Carlos Alberto
+ */
 public class Transacao {
 	private String operacao;
 	private float valor;
@@ -7,11 +12,12 @@ public class Transacao {
 	private float novoSaldo;
 
 	/**
-	 * Atribui estado (constroi) uma Transacao. 
-	 * @param novoSaldo  valor float para registrar o saldo apos a operacao
+	 * Atribui estado (constroi) uma Transacao.
+	 * 
+	 * @param novoSaldo valor float para registrar o saldo apos a operacao
 	 * @param operacao  tipo de operacao
-	 * @param valor  o valor a ser processado na transacao
-	 * */
+	 * @param valor     o valor a ser processado na transacao
+	 */
 	public Transacao(float novoSaldo, String operacao, float valor) {
 		this.novoSaldo = novoSaldo;
 		this.operacao = operacao;

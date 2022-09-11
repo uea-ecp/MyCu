@@ -7,6 +7,11 @@ import java.util.List;
 
 import banco.transacao.Transacao;
 
+/**
+ * Representa uma ciinta corrente
+ * 
+ * @author Daniela e Carlos Alberto
+ */
 public class ContaCorrente {
 	private float saldo;
 	private int numeroConta;
@@ -17,10 +22,11 @@ public class ContaCorrente {
 	private List<Transacao> transacoes = new ArrayList<>();
 
 	/**
-	 * Atribui estado (constroi) uma ContaCorrente. 
-	 * @param numeroConta  numero da conta corrente
-	 * @param numeroAgencia  numero da agebcia do cliente
-	 * */
+	 * Atribui estado (constroi) uma ContaCorrente.
+	 * 
+	 * @param numeroConta   numero da conta corrente
+	 * @param numeroAgencia numero da agebcia do cliente
+	 */
 	public ContaCorrente(int numeroConta, int numeroAgencia) {
 		this.saldo = 0.0f;
 		this.numeroConta = numeroConta;
@@ -28,11 +34,12 @@ public class ContaCorrente {
 	}
 
 	/* Metodos de operacoes bancarias */
-	
+
 	/**
 	 * Opera o deposito com o incremento do novo valor ao saldo da conta.
-	 * @param v  o valor float para efetuar o deposito
-	 * */
+	 * 
+	 * @param v o valor float para efetuar o deposito
+	 */
 	public void depositar(float v) {
 		this.saldo += v;
 		Transacao t = new Transacao(saldo, "Deposito", v);
@@ -40,10 +47,11 @@ public class ContaCorrente {
 	}
 
 	/**
-	 * Opera o saque. O saque acontece desde que o saldo não fique negativo. 
-	 * @param v  o valor float para efetuar o saque
+	 * Opera o saque. O saque acontece desde que o saldo não fique negativo.
+	 * 
+	 * @param v o valor float para efetuar o saque
 	 * @return status da operacao saque, se foi realizado com sucesso ou não
-	 * */
+	 */
 	public boolean sacar(float v) {
 		float novoSaldo = saldo - v;
 
@@ -58,17 +66,20 @@ public class ContaCorrente {
 	}
 
 	/**
-	 * Recupera a listagem de transações.  
+	 * Recupera a listagem de transações.
+	 * 
 	 * @return transacoes
-	 * */
+	 */
 	public List<Transacao> obterExtrato() {
 		return transacoes;
 	}
-	
+
 	/**
-	 * Registra uma transação de saque. Registro acontece desde que saque seja efetuado com sucesso. 
-	 * @param t  o objeto transacao a ser registrado
-	 * */
+	 * Registra uma transação de saque. Registro acontece desde que saque seja
+	 * efetuado com sucesso.
+	 * 
+	 * @param t o objeto transacao a ser registrado
+	 */
 	public void registrarTransacao(Transacao t) {
 		Date dataHoraAtual = new Date();
 		String dataHora = new SimpleDateFormat("dd/MM HH:mm").format(dataHoraAtual);

@@ -2,6 +2,11 @@ package banco.usuario;
 
 import banco.conta.ContaCorrente;
 
+/**
+ * Representa um cliente
+ * 
+ * @author Daniela e Carlos Alberto
+ */
 public class Cliente {
 	private String nome;
 	private String rg;
@@ -11,11 +16,12 @@ public class Cliente {
 	private ContaCorrente contaCorrente;
 
 	/**
-	 * Atribui estado (constroi) um Cliente. 
-	 * @param nome  nome do cliente
-	 * @param rg  numero do registro geral
-	 * @param endereco  endereco de moradia
-	 * */
+	 * Atribui estado (constroi) um Cliente.
+	 * 
+	 * @param nome     nome do cliente
+	 * @param rg       numero do registro geral
+	 * @param endereco endereco de moradia
+	 */
 	public Cliente(String nome, String rg, String endereco) {
 		this.nome = nome;
 		this.rg = rg;
